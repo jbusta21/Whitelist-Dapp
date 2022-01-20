@@ -12,26 +12,26 @@ export default function Home() {
   const [joinedWhitelist, setJoinedWhitelist] = useState(false);
   // loading is set to true when we are waiting for a transaction to get mined
   const [loading, setLoading] = useState(false);
-  // numberOfWhitelisted tracks the number of addresse's whitelisted
+  // numberOfWhitelisted tracks the number of addresses's whitelisted
   const [numberOfWhitelisted, setNumberOfWhitelisted] = useState(0);
-  // Create a reference to the Web3 Modal (used for connecting to MetaMask) which persists as long as the page is open
+  // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
   const web3ModalRef = useRef();
 
   /**
- * Returns a Provider or Signer object representing the Ethereum RPC with or without the
- * signing capabilities of metamask attached
- *
- * A `Provider` is needed to interact with the blockchain - reading transactions, reading balances, reading state, etc.
- *
- * A `Signer` is a special type of Provider used in case a `write` transaction needs to be made to the blockchain, which involves the connected account
- * needing to make a digital signature to authorize the transaction being sent. Metamask exposes a Signer API to allow your website to
- * request signatures from the user using Signer functions.
- *
- * @param {*} needSigner - True if you need the signer, default false otherwise
- */
-  const getProviderOrSigner = async (needSign = false) => {
+   * Returns a Provider or Signer object representing the Ethereum RPC with or without the
+   * signing capabilities of metamask attached
+   *
+   * A `Provider` is needed to interact with the blockchain - reading transactions, reading balances, reading state, etc.
+   *
+   * A `Signer` is a special type of Provider used in case a `write` transaction needs to be made to the blockchain, which involves the connected account
+   * needing to make a digital signature to authorize the transaction being sent. Metamask exposes a Signer API to allow your website to
+   * request signatures from the user using Signer functions.
+   *
+   * @param {*} needSigner - True if you need the signer, default false otherwise
+   */
+  const getProviderOrSigner = async (needSigner = false) => {
     // Connect to Metamask
-    // Since we store 'web3Modal' as a reference, we need to access the 'current' value to get access to the underlying object
+    // Since we store `web3Modal` as a reference, we need to access the `current` value to get access to the underlying object
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
 
@@ -39,7 +39,7 @@ export default function Home() {
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 4) {
       window.alert("Change the network to Rinkeby");
-      throw new Error("Chance the network to Rinkeby");
+      throw new Error("Change network to Rinkeby");
     }
 
     if (needSigner) {
@@ -78,8 +78,8 @@ export default function Home() {
   };
 
   /**
- * getNumberOfWhitelisted:  gets the number of whitelisted addresses
- */
+   * getNumberOfWhitelisted:  gets the number of whitelisted addresses
+   */
   const getNumberOfWhitelisted = async () => {
     try {
       // Get the provider from web3Modal, which in our case is MetaMask
@@ -87,7 +87,7 @@ export default function Home() {
       const provider = await getProviderOrSigner();
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
-      const whitlistContract = new Contract(
+      const whitelistContract = new Contract(
         WHITELIST_CONTRACT_ADDRESS,
         abi,
         provider
@@ -101,8 +101,8 @@ export default function Home() {
   };
 
   /**
- * checkIfAddressInWhitelist: Checks if the address is in whitelist
- */
+   * checkIfAddressInWhitelist: Checks if the address is in whitelist
+   */
   const checkIfAddressInWhitelist = async () => {
     try {
       // We will need the signer later to get the user's address
@@ -116,7 +116,7 @@ export default function Home() {
       );
       // Get the address associated to the signer which is connected to  MetaMask
       const address = await signer.getAddress();
-      // call the whitelistedAddress from the contract
+      // call the whitelistedAddresses from the contract
       const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
         address
       );
@@ -127,9 +127,8 @@ export default function Home() {
   };
 
   /*
-  connectWallet: Connects the MetaMask wallet
-*/
-
+    connectWallet: Connects the MetaMask wallet
+  */
   const connectWallet = async () => {
     try {
       // Get the provider from web3Modal, which in our case is MetaMask
@@ -145,8 +144,8 @@ export default function Home() {
   };
 
   /*
-  renderButton: Returns a button based on the state of the dapp
-*/
+    renderButton: Returns a button based on the state of the dapp
+  */
   const renderButton = () => {
     if (walletConnected) {
       if (joinedWhitelist) {
@@ -199,7 +198,7 @@ export default function Home() {
       </Head>
       <div className={styles.main}>
         <div>
-          <h1 className={styles.title}>Welcome to Crypto Devs</h1>
+          <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
           <div className={styles.description}>
             Its an NFT collection for developers in Crypto.
           </div>
@@ -209,7 +208,7 @@ export default function Home() {
           {renderButton()}
         </div>
         <div>
-        <img className={styles.image} src="./crypto-devs.svg.jpg" />
+          <img className={styles.image} src="./crypto-devs.svg.jpg" />
         </div>
       </div>
 
@@ -217,5 +216,5 @@ export default function Home() {
         Made with &#10084; by Crypto Devs
       </footer>
     </div>
-  )
+  );
 }
